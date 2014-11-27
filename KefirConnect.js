@@ -20,8 +20,8 @@
         var mixin = {};
         mixin.componentDidMount = function () {
             this.subscriptions = this.subscriptions || [];
-            var handler = function () {
-                this.setState(keyValue(statePropertyName, observable._current));
+            var handler = function (value) {
+                this.setState(keyValue(statePropertyName, value));
             }.bind(this);
             this.subscriptions.push(handler);
             observable.onValue(handler);
