@@ -1,0 +1,25 @@
+{
+  "name": "kefir-react",
+  "version": "0.1.0",
+  "description": "Mixin for linking Kefir.js observables as state value",
+  "main": "KefirConnect.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iofjuupasli/kefir-react.git"
+  },
+  "keywords": [
+    "react",
+    "kefir",
+    "frp",
+    "mixin"
+  ],
+  "author": "Tretyak Valery <iofjuupasli@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iofjuupasli/kefir-react/issues"
+  },
+  "homepage": "https://github.com/iofjuupasli/kefir-react"
+}
