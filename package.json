@@ -1,6 +1,6 @@
 {
   "name": "kefir-react",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Mixin for linking Kefir.js observables as state value",
   "main": "KefirConnect.js",
   "scripts": {
