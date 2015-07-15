@@ -31,9 +31,9 @@
                 observable.offValue(handler);
             });
         };
-        if ('_current' in observable) {
+        if ('_getInitialCurrent' in observable) {
             mixin.getInitialState = function () {
-                return keyValue(statePropertyName, observable._current);
+                return keyValue(statePropertyName, observable._getInitialCurrent());
             };
         }
         return mixin;
