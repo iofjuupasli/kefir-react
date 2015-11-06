@@ -1,6 +1,7 @@
 (function (root, factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
+        /* global define */
         define([], factory);
     } else if (typeof exports === 'object') {
         /* global module */
@@ -16,8 +17,24 @@
         obj[key] = value;
         return obj;
     }
+
+    function getPropertyValue(property) {
+        var value;
+
+        function saveCurrentValue(v) {
+            value = v;
+        }
+        property.onValue(saveCurrentValue).offValue(saveCurrentValue);
+        return value;
+    }
+
     return function (observable, statePropertyName) {
         var mixin = {};
+
+        mixin.getInitialState = function () {
+            return keyValue(statePropertyName, getPropertyValue(observable));
+        };
+
         mixin.componentDidMount = function () {
             this.subscriptions = this.subscriptions || [];
             var handler = function (value) {
@@ -26,16 +43,13 @@
             this.subscriptions.push(handler);
             observable.onValue(handler);
         };
+
         mixin.componentWillUnmount = function () {
             this.subscriptions.forEach(function (handler) {
                 observable.offValue(handler);
             });
         };
-        if ('_getInitialCurrent' in observable) {
-            mixin.getInitialState = function () {
-                return keyValue(statePropertyName, observable._getInitialCurrent());
-            };
-        }
+
         return mixin;
     };
 }));

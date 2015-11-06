@@ -1,10 +1,10 @@
 {
   "name": "kefir-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Mixin for linking Kefir.js observables as state value",
-  "main": "KefirConnect.js",
+  "main": "kefir-react.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,13 @@
   "bugs": {
     "url": "https://github.com/iofjuupasli/kefir-react/issues"
   },
-  "homepage": "https://github.com/iofjuupasli/kefir-react"
+  "homepage": "https://github.com/iofjuupasli/kefir-react",
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "chai-spies": "^0.7.1",
+    "eslint": "^1.8.0",
+    "kefir": "^3.1.0",
+    "mocha": "^2.3.3",
+    "ramda": "^0.18.0"
+  }
 }

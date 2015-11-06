@@ -1,12 +1,12 @@
 {
   "name": "kefir-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/iofjuupasli/kefir-react",
   "authors": [
     "iofjuupasli <iofjuupasli@gmail.com>"
   ],
   "description": "Mixin for linking Kefir.js observables as state value",
-  "main": "KefirConnect.js",
+  "main": "kefir-react.js",
   "moduleType": [
     "amd",
     "es6",
