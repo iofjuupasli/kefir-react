@@ -29,27 +29,23 @@
     }
 
     return function (observable, statePropertyName) {
-        var mixin = {};
-
-        mixin.getInitialState = function () {
-            return keyValue(statePropertyName, getPropertyValue(observable));
-        };
-
-        mixin.componentDidMount = function () {
-            this.subscriptions = this.subscriptions || [];
-            var handler = function (value) {
-                this.setState(keyValue(statePropertyName, value));
-            }.bind(this);
-            this.subscriptions.push(handler);
-            observable.onValue(handler);
-        };
-
-        mixin.componentWillUnmount = function () {
-            this.subscriptions.forEach(function (handler) {
-                observable.offValue(handler);
-            });
-        };
-
-        return mixin;
+        return {
+            getInitialState: function () {
+                return keyValue(statePropertyName, getPropertyValue(observable));
+            },
+            componentDidMount: function () {
+                this.subscriptions = this.subscriptions || [];
+                var handler = function (value) {
+                    this.setState(keyValue(statePropertyName, value));
+                }.bind(this);
+                this.subscriptions.push(handler);
+                observable.onValue(handler);
+            },
+            componentWillUnmount: function () {
+                this.subscriptions.forEach(function (handler) {
+                    observable.offValue(handler);
+                });
+            }
+        }
     };
 }));
