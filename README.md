@@ -1,36 +1,49 @@
-[![Build Status](https://travis-ci.org/iofjuupasli/kefir-react.svg?branch=master)](https://travis-ci.org/iofjuupasli/kefir-react)
-
 kefir-react
 ===
 
-React mixin for linking Kefir.js observables as state value
+React wrapper component for linking Kefir.js observables as props value
 
 Usage [example](https://github.com/iofjuupasli/kefir-react-example)
 
 ```js
-import KefirConnect from 'kefir-react';
+import KefirReact from 'KefirReact';
 
 const myProperty = Kefir.fromPoll(1, () => new Date()})
     .toProperty(() => new Date());
 
-const MyComponent = React.createClass({
-    mixins: [KefirConnect(myProperty, 'myValue')],
-    render: function () {
-        return React.DOM.div(null, this.state.myValue);
+class App extends React.Component {
+    render() {
+        return this.props.myValue;
     }
-});
+}
+
+class Main extends React.Component {
+    render() {
+        return React.createElement(KefirReact, {
+                streams: {
+                    myValue: myProperty
+                }
+            },
+            React.createElement(App)
+        );
+    }
+}
 ```
 
 API
 ---
-Exports React mixin constructor
+Exports React component class
 
-```ts
-interface KefirConnectMixin {
-    (observable : KefirObservable, statePropertyName : string) : ReactMixin
-}
+Gets object of streams where keys are names of props and values are observables
+
+```js
+React.createElement(KefirReact, {
+        streams: {
+            valueWillBeAvailableInPropsAtThisKey: observable
+        }
+    },
+    React.createElement(ComponentInWhichValuesWillBeInProps)
+);
 ```
 
-When observable is KefirProperty, current value of property is used for `getInitialState`
-
-Value is available at `this.state[statePropertyName]`
+When observable is KefirProperty, current value of property will be immediately in props

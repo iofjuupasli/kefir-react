@@ -1,6 +1,6 @@
 {
   "name": "kefir-react",
-  "version": "2.0.0",
+  "version": "3.0.0-rc.1",
   "homepage": "https://github.com/iofjuupasli/kefir-react",
   "authors": [
     "iofjuupasli <iofjuupasli@gmail.com>"
@@ -26,5 +26,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "react": "^0.14.3"
+  }
 }
