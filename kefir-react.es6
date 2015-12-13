@@ -8,10 +8,16 @@ const getPropertyValue = property => {
 };
 
 const map = (fn, obj) => Object.keys(obj)
-    .reduce((result, key) => result[key] = fn(result[key]), {});
+    .reduce((result, key) => {
+        result[key] = fn(result[key])
+        return result;
+    }, {});
 
 const mapObjIndexed = (fn, obj) => Object.keys(obj)
-    .reduce((result, key) => result[key] = fn(result[key], key), {});
+    .reduce((result, key) => {
+        result[key] = fn(result[key], key)
+        return result;
+    }, {});
 
 const equals = (a, b) => a.every((v, i) => b[i] === v);
 
