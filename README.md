@@ -6,7 +6,7 @@ React wrapper component for linking Kefir.js observables as props value
 Usage [example](https://github.com/iofjuupasli/kefir-react-example)
 
 ```js
-import KefirReact from 'KefirReact';
+import KefirReact from 'kefir-react';
 
 const myProperty = Kefir.fromPoll(1, () => new Date()})
     .toProperty(() => new Date());
