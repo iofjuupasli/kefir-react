@@ -1,11 +1,11 @@
 {
   "name": "kefir-react",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0",
   "homepage": "https://github.com/iofjuupasli/kefir-react",
   "authors": [
     "iofjuupasli <iofjuupasli@gmail.com>"
   ],
-  "description": "Mixin for linking Kefir.js observables as state value",
+  "description": "React wrapper class for linking Kefir.js observables as props value",
   "main": "kefir-react.js",
   "moduleType": [
     "amd",

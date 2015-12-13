@@ -103,14 +103,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
     var map = function map(fn, obj) {
         return Object.keys(obj).reduce(function (result, key) {
-            result[key] = fn(result[key]);
+            result[key] = fn(obj[key]);
             return result;
         }, {});
     };
 
     var mapObjIndexed = function mapObjIndexed(fn, obj) {
         return Object.keys(obj).reduce(function (result, key) {
-            result[key] = fn(result[key], key);
+            result[key] = fn(obj[key], key);
             return result;
         }, {});
     };
