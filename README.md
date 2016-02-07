@@ -22,9 +22,9 @@ class Main extends React.Component {
         return React.createElement(KefirReact, {
                 streams: {
                     myValue: myProperty
-                }
-            },
-            React.createElement(App)
+                },
+                render: values => React.createElement(App, values)
+            }
         );
     }
 }
@@ -36,14 +36,16 @@ Exports React component class
 
 Gets object of streams where keys are names of props and values are observables
 
+And gets `render` function which should be used for render children components
+
 ```js
 React.createElement(KefirReact, {
         streams: {
             valueWillBeAvailableInPropsAtThisKey: observable
-        }
-    },
-    React.createElement(ComponentInWhichValuesWillBeInProps)
+        },
+        render: values => React.createElement(ComponentInWhichValuesWillBeInProps, values)
+    }
 );
 ```
 
-When observable is KefirProperty, current value of property will be immediately in props
+If observable is KefirProperty, current value of property will be immediately in props

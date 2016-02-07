@@ -1,62 +1,51 @@
 import React from 'react';
-
-const getPropertyValue = property => {
-    let value;
-    const saveCurrentValue = v => value = v;
-    property.onValue(saveCurrentValue).offValue(saveCurrentValue);
-    return value;
-};
-
-const map = (fn, obj) => Object.keys(obj)
-    .reduce((result, key) => {
-        result[key] = fn(obj[key])
-        return result;
-    }, {});
-
-const mapObjIndexed = (fn, obj) => Object.keys(obj)
-    .reduce((result, key) => {
-        result[key] = fn(obj[key], key)
-        return result;
-    }, {});
-
-const equals = (a, b) => a.every((v, i) => b[i] === v);
+import Kefir from 'kefir';
 
 export default class KefirReact extends React.Component {
-    state = map(getPropertyValue, this.props.streams)
+    constructor(props) {
+        super(props);
+    }
 
     _unsubscribe() {
-        this.subscriptions.forEach(({stream, handler}) => {
+        this.subscriptions.forEach(({
+            stream, handler
+        }) => {
             stream.offValue(handler);
         });
         this.subscriptions = [];
     }
 
     _subscribe(streams) {
+        const streamPairs = [];
+        Object.keys(streams)
+            .map(key => streamPairs.push([key, streams[key]]));
+        let stream = Kefir.combine(
+            streamPairs.map(([_, s]) => s),
+
+            (...args) => args.reduce((result, v, i) => {
+                result[streamPairs[i][0]] = v;
+                return result;
+            }, {})
+        );
+        if (this.props.debounce) {
+            stream = stream.debounce(this.props.debounce);
+        }
         this.subscriptions = this.subscriptions || [];
-        const handlerByKey = key => value => {
-            this.setState(() => ({
-                [key]: value
-            }));
-        };
-        mapObjIndexed((stream, key) => {
-            const handler = handlerByKey(key);
-            this.subscriptions.push({
-                stream,
-                handler
-            });
-            stream.onValue(handler);
-        }, streams);
+        const handler = v => this.setState(v);
+        this.subscriptions.push({
+            stream,
+            handler
+        });
+        stream.onValue(handler);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this._subscribe(this.props.streams);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!equals(
-            Object.keys(nextProps.streams),
-            Object.keys(this.props.streams)
-        )) {
+        if (Object.keys(nextProps.streams).length !== Object.keys(this.props.streams) ||
+            Object.keys(nextProps.streams).some(k => !(k in this.props.streams))) {
             this.setState(() => ({}));
             this._unsubscribe();
             this._subscribe(nextProps.streams);
@@ -68,9 +57,6 @@ export default class KefirReact extends React.Component {
     }
 
     render() {
-        return React.createElement('div', null, React.Children.map(
-            this.props.children,
-            child => React.cloneElement(child, this.state)
-        ));
+        return this.props.render(this.state);
     }
 }
