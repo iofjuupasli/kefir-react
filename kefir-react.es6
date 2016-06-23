@@ -45,12 +45,12 @@ export class KefirReactComponent extends React.Component {
     }
 }
 
-export const KefirReact = (props$, Component) => {
+export const KefirReact = (props$, Component, Loader = Component) => {
     return props => h(KefirReactComponent, {
         props$,
-        render: values => h(Component, {
+        render: values => values ? h(Component, {
             ...props,
             ...values
-        })
+        }) : h(Loader, props)
     })
 };

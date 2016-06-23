@@ -1,6 +1,6 @@
 {
   "name": "kefir-react",
-  "version": "5.0.0-rc.1",
+  "version": "5.0.0-rc.2",
   "description": "React wrapper class for linking Kefir.js observables as props value",
   "main": "kefir-react.js",
   "scripts": {

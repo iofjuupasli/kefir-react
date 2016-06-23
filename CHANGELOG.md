@@ -1,3 +1,10 @@
+v5.0.0-rc.2
+===
+
+New Features
+---
+ - `KefirReact` also gets third argument `LoaderComponentClass`
+
 v5.0.0-rc.1
 ===
 

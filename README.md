@@ -36,9 +36,12 @@ Exports `KefirReact` factory and `KefirReactComponent` react component
 ### `KefirReact`
 
 ```
-(props$, ComponentClass) -> WrappedComponentClass
+(props$, ComponentClass, [LoaderComponentClass]) -> WrappedComponentClass
 ```
 
 So in `props` of instantiated `ComponentClass` there will be values from `props$`
+
+`LoaderComponentClass` is optional.
+It'll be displayed until first value in `props$`.
 
 Use [kefir-combine-object](https://github.com/iofjuupasli/kefir-combine-object) to create `props$`
