@@ -154,11 +154,13 @@
         props$: T.any.isRequired, // Kefir.Observable
         render: T.func.isRequired };
     var KefirReact = exports.KefirReact = function KefirReact(props$, Component) {
+        var Loader = arguments.length <= 2 || arguments[2] === undefined ? Component : arguments[2];
+
         return function (props) {
             return h(KefirReactComponent, {
                 props$: props$,
                 render: function render(values) {
-                    return h(Component, _extends({}, props, values));
+                    return values ? h(Component, _extends({}, props, values)) : h(Loader, props);
                 }
             });
         };
