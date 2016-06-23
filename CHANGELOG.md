@@ -1,3 +1,16 @@
+v5.0.0-rc.1
+===
+
+Breaking
+---
+ - API was completely changed
+
+New Features
+---
+ - `KefirReact` is component factory `(props$, Component) => WrappedComponent`
+
+Use [kefir-combine-object](https://github.com/iofjuupasli/kefir-combine-object) to create `props$`
+
 v4.0.0
 ===
 

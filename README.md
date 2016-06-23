@@ -6,7 +6,7 @@ React wrapper component for linking Kefir.js observables as props value
 Usage [example](https://github.com/iofjuupasli/kefir-react-example)
 
 ```js
-import KefirReact from 'kefir-react';
+import { KefirReact } from 'kefir-react';
 
 const myProperty = Kefir.fromPoll(1, () => new Date()})
     .toProperty(() => new Date());
@@ -17,35 +17,28 @@ class App extends React.Component {
     }
 }
 
+const AppWrapped = KefirReact(
+    myProperty.map(myValue => { myValue }),
+    App
+);
+
 class Main extends React.Component {
     render() {
-        return React.createElement(KefirReact, {
-                streams: {
-                    myValue: myProperty
-                },
-                render: values => React.createElement(App, values)
-            }
-        );
+        return React.createElement(AppWrapped);
     }
 }
 ```
 
 API
 ---
-Exports React component class
+Exports `KefirReact` factory and `KefirReactComponent` react component
 
-Gets object of streams where keys are names of props and values are observables
+### `KefirReact`
 
-And gets `render` function which should be used for render children components
-
-```js
-React.createElement(KefirReact, {
-        streams: {
-            valueWillBeAvailableInPropsAtThisKey: observable
-        },
-        render: values => React.createElement(ComponentInWhichValuesWillBeInProps, values)
-    }
-);
+```
+(props$, ComponentClass) -> WrappedComponentClass
 ```
 
-If observable is KefirProperty, current value of property will be immediately in props
+So in `props` of instantiated `ComponentClass` there will be values from `props$`
+
+Use [kefir-combine-object](https://github.com/iofjuupasli/kefir-combine-object) to create `props$`

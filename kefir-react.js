@@ -1,27 +1,24 @@
-'use strict';
-
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'react', 'kefir'], factory);
+        define(['exports', 'react'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('react'), require('kefir'));
+        factory(exports, require('react'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.kefir);
+        factory(mod.exports, global.react);
         global.kefirReact = mod.exports;
     }
-})(this, function (exports, _react, _kefir) {
+})(this, function (exports, _react) {
+    'use strict';
+
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
+    exports.KefirReact = exports.KefirReactComponent = undefined;
 
     var _react2 = _interopRequireDefault(_react);
-
-    var _kefir2 = _interopRequireDefault(_kefir);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -29,43 +26,19 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         };
     }
 
-    var _slicedToArray = (function () {
-        function sliceIterator(arr, i) {
-            var _arr = [];
-            var _n = true;
-            var _d = false;
-            var _e = undefined;
+    var _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+            var source = arguments[i];
 
-            try {
-                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-                    _arr.push(_s.value);
-
-                    if (i && _arr.length === i) break;
-                }
-            } catch (err) {
-                _d = true;
-                _e = err;
-            } finally {
-                try {
-                    if (!_n && _i["return"]) _i["return"]();
-                } finally {
-                    if (_d) throw _e;
+            for (var key in source) {
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
                 }
             }
-
-            return _arr;
         }
 
-        return function (arr, i) {
-            if (Array.isArray(arr)) {
-                return arr;
-            } else if (Symbol.iterator in Object(arr)) {
-                return sliceIterator(arr, i);
-            } else {
-                throw new TypeError("Invalid attempt to destructure non-iterable instance");
-            }
-        };
-    })();
+        return target;
+    };
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -73,7 +46,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         }
     }
 
-    var _createClass = (function () {
+    var _createClass = function () {
         function defineProperties(target, props) {
             for (var i = 0; i < props.length; i++) {
                 var descriptor = props[i];
@@ -89,14 +62,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
             if (staticProps) defineProperties(Constructor, staticProps);
             return Constructor;
         };
-    })();
+    }();
 
     function _possibleConstructorReturn(self, call) {
         if (!self) {
             throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
         }
 
-        return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
     }
 
     function _inherits(subClass, superClass) {
@@ -115,88 +88,51 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
 
-    var KefirReact = (function (_React$Component) {
-        _inherits(KefirReact, _React$Component);
+    var T = _react2.default.PropTypes;
+    var h = _react2.default.createElement;
 
-        function KefirReact(props) {
-            _classCallCheck(this, KefirReact);
+    var KefirReactComponent = exports.KefirReactComponent = function (_React$Component) {
+        _inherits(KefirReactComponent, _React$Component);
 
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(KefirReact).call(this, props));
-        }
+        function KefirReactComponent() {
+            var _Object$getPrototypeO;
 
-        _createClass(KefirReact, [{
-            key: '_unsubscribe',
-            value: function _unsubscribe() {
-                this.subscriptions.forEach(function (_ref) {
-                    var stream = _ref.stream;
-                    var handler = _ref.handler;
-                    stream.offValue(handler);
-                });
-                this.subscriptions = [];
+            var _temp, _this, _ret;
+
+            _classCallCheck(this, KefirReactComponent);
+
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
             }
-        }, {
-            key: '_subscribe',
-            value: function _subscribe(streams) {
-                var _this2 = this;
 
-                var streamPairs = [];
-                Object.keys(streams).map(function (key) {
-                    return streamPairs.push([key, streams[key]]);
-                });
-
-                var stream = _kefir2.default.combine(streamPairs.map(function (_ref2) {
-                    var _ref3 = _slicedToArray(_ref2, 2);
-
-                    var _ = _ref3[0];
-                    var s = _ref3[1];
-                    return s;
-                }), function () {
-                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                        args[_key] = arguments[_key];
-                    }
-
-                    return args.reduce(function (result, v, i) {
-                        result[streamPairs[i][0]] = v;
-                        return result;
-                    }, {});
-                });
-
-                if (this.props.debounce) {
-                    stream = stream.debounce(this.props.debounce);
-                }
-
-                this.subscriptions = this.subscriptions || [];
-
-                var handler = function handler(v) {
-                    return _this2.setState(v);
+            return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(KefirReactComponent)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+                values: null
+            }, _this._subscribe = function (props$) {
+                var handler = function handler(values) {
+                    _this.setState({
+                        values: values
+                    });
                 };
+                props$.onValue(handler);
+                _this._unsubscribe = function () {
+                    props$.offValue(handler);
+                    _this._unsubscribe = null;
+                };
+            }, _temp), _possibleConstructorReturn(_this, _ret);
+        } // props => component
 
-                this.subscriptions.push({
-                    stream: stream,
-                    handler: handler
-                });
-                stream.onValue(handler);
-            }
-        }, {
+
+        _createClass(KefirReactComponent, [{
             key: 'componentWillMount',
             value: function componentWillMount() {
-                this._subscribe(this.props.streams);
+                this._subscribe(this.props.props$);
             }
         }, {
             key: 'componentWillReceiveProps',
             value: function componentWillReceiveProps(nextProps) {
-                var _this3 = this;
-
-                if (Object.keys(nextProps.streams).length !== Object.keys(this.props.streams) || Object.keys(nextProps.streams).some(function (k) {
-                    return !(k in _this3.props.streams);
-                })) {
-                    this.setState(function () {
-                        return {};
-                    });
-
+                if (nextProps.props$ !== this.props.props$) {
                     this._unsubscribe();
-
-                    this._subscribe(nextProps.streams);
+                    this._subscribe(nextProps.props$);
                 }
             }
         }, {
@@ -207,12 +143,24 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         }, {
             key: 'render',
             value: function render() {
-                return this.props.render(this.state);
+                return this.props.render(this.state.values);
             }
         }]);
 
-        return KefirReact;
-    })(_react2.default.Component);
+        return KefirReactComponent;
+    }(_react2.default.Component);
 
-    exports.default = KefirReact;
+    KefirReactComponent.propTypes = {
+        props$: T.any.isRequired, // Kefir.Observable
+        render: T.func.isRequired };
+    var KefirReact = exports.KefirReact = function KefirReact(props$, Component) {
+        return function (props) {
+            return h(KefirReactComponent, {
+                props$: props$,
+                render: function render(values) {
+                    return h(Component, _extends({}, props, values));
+                }
+            });
+        };
+    };
 });

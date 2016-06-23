@@ -1,54 +1,38 @@
 import React from 'react';
-import Kefir from 'kefir';
+const T = React.PropTypes;
+const h = React.createElement;
 
-export default class KefirReact extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+export class KefirReactComponent extends React.Component {
+    static propTypes = {
+        props$: T.any.isRequired, // Kefir.Observable
+        render: T.func.isRequired // props => component
+    };
 
-    _unsubscribe() {
-        this.subscriptions.forEach(({
-            stream, handler
-        }) => {
-            stream.offValue(handler);
-        });
-        this.subscriptions = [];
-    }
+    state = {
+        values: null
+    };
 
-    _subscribe(streams) {
-        const streamPairs = [];
-        Object.keys(streams)
-            .map(key => streamPairs.push([key, streams[key]]));
-        let stream = Kefir.combine(
-            streamPairs.map(([_, s]) => s),
-
-            (...args) => args.reduce((result, v, i) => {
-                result[streamPairs[i][0]] = v;
-                return result;
-            }, {})
-        );
-        if (this.props.debounce) {
-            stream = stream.debounce(this.props.debounce);
+    _subscribe = props$ => {
+        const handler = values => {
+            this.setState({
+                values
+            });
         }
-        this.subscriptions = this.subscriptions || [];
-        const handler = v => this.setState(v);
-        this.subscriptions.push({
-            stream,
-            handler
-        });
-        stream.onValue(handler);
+        props$.onValue(handler);
+        this._unsubscribe = () => {
+            props$.offValue(handler);
+            this._unsubscribe = null;
+        };
     }
 
     componentWillMount() {
-        this._subscribe(this.props.streams);
+        this._subscribe(this.props.props$);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (Object.keys(nextProps.streams).length !== Object.keys(this.props.streams) ||
-            Object.keys(nextProps.streams).some(k => !(k in this.props.streams))) {
-            this.setState(() => ({}));
+        if (nextProps.props$ !== this.props.props$) {
             this._unsubscribe();
-            this._subscribe(nextProps.streams);
+            this._subscribe(nextProps.props$);
         }
     }
 
@@ -57,6 +41,16 @@ export default class KefirReact extends React.Component {
     }
 
     render() {
-        return this.props.render(this.state);
+        return this.props.render(this.state.values);
     }
 }
+
+export const KefirReact = (props$, Component) => {
+    return props => h(KefirReactComponent, {
+        props$,
+        render: values => h(Component, {
+            ...props,
+            ...values
+        })
+    })
+};
